@@ -79,6 +79,7 @@ function updateDashboardVisibility(state) {
         // Check for final completion
         const steps = state.flows[state.role] || [];
         if (steps.length > 0 && state.completedSteps.length === steps.length) {
+            if (window.analytics) window.analytics.trackJourneyCompletion();
             setTimeout(() => {
                 celebration.style.display = 'flex';
                 celebration.focus(); // Accessibility: focus the modal

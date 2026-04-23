@@ -138,8 +138,8 @@ class StepEngine {
         const completeBtn = this.cardContainer.querySelector('#btn-complete');
         if (completeBtn) {
             completeBtn.addEventListener('click', () => {
-                window.domHelpers.showToast('Great! You’ve successfully completed this step. 🎉');
-                if (window.analytics) window.analytics.trackStepCompletion(step.id);
+                window.domHelpers.showToast(window.CONFIG.STRINGS.COMPLETE_STEP_TOAST);
+                if (window.analytics) window.analytics.trackStepCompletion(step.title);
                 
                 const cardInner = this.cardContainer.firstElementChild;
                 if (cardInner) cardInner.classList.add('pulse-glow');

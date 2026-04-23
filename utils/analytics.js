@@ -28,27 +28,32 @@ class AnalyticsTracker {
     }
 
     trackRoleSelection(role) {
-        this.trackEvent(window.CONFIG.EVENTS.ROLE_SELECT, {
-            role: role
+        this.trackEvent('role_selected', { 
+            role: role 
         });
     }
 
-    trackStepCompletion(stepId) {
-        this.trackEvent(window.CONFIG.EVENTS.STEP_COMPLETE, {
-            step_id: stepId,
-            role: window.stateManager.state.role || 'unknown'
+    trackStepCompletion(stepTitle) {
+        this.trackEvent('step_completed', { 
+            step: stepTitle 
         });
     }
 
     trackScenarioTrigger(stepTitle) {
-        this.trackEvent(window.CONFIG.EVENTS.SCENARIO_TRIGGER, {
-            step_title: stepTitle
+        this.trackEvent('scenario_triggered', { 
+            step: stepTitle 
         });
     }
 
-    trackAssistantUsage(promptId) {
-        this.trackEvent(window.CONFIG.EVENTS.ASSISTANT_ASK, {
-            prompt_id: promptId
+    trackAssistantUsage(action) {
+        this.trackEvent('assistant_used', { 
+            action: action 
+        });
+    }
+
+    trackJourneyCompletion() {
+        this.trackEvent('journey_completed', { 
+            status: 'success' 
         });
     }
 }
