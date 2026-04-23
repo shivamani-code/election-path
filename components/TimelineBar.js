@@ -40,9 +40,6 @@ class TimelineBar {
 
         this.container.innerHTML = `
             <div class="timeline-wrapper">
-                <div class="timeline-track">
-                    <div class="timeline-progress" style="width: ${progress * 100}%"></div>
-                </div>
                 <div class="timeline-phases">
                     ${this.phases.map((phase, index) => {
                         const isActive = progress >= phase.minStep && progress < phase.maxStep;
@@ -68,18 +65,18 @@ class TimelineBar {
                 </div>
                 <div class="timeline-status-info">
                     <div class="status-group">
-                        <span class="status-prefix">CURRENT PHASE:</span>
+                        <span class="status-prefix">Current Phase:</span>
                         <span class="status-value status-${statusLabel.toLowerCase()}">${activePhaseLabel} (${statusLabel})</span>
                     </div>
                     ${nextPhaseLabel !== 'NONE' ? `
                         <div class="status-group">
-                            <span class="status-prefix">UPCOMING:</span>
+                            <span class="status-prefix">Upcoming:</span>
                             <span class="status-value next-phase">${nextPhaseLabel}</span>
                         </div>
                     ` : `
                         <div class="status-group">
-                            <span class="status-prefix">FINALE:</span>
-                            <span class="status-value finale">READY FOR ELECTION DAY</span>
+                            <span class="status-prefix">Finale:</span>
+                            <span class="status-value finale">Ready for Election Day</span>
                         </div>
                     `}
                 </div>

@@ -286,56 +286,63 @@ button {
 /* Timeline Bar Styles */
 .timeline-wrapper {
     width: 100%;
-    position: relative;
-    padding: var(--spacing-sm) 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.timeline-track {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.05);
-    transform: translateY(-50%);
-    border-radius: var(--radius-xl);
-    z-index: 1;
-    border: 1px solid var(--glass-border);
-}
-
-.timeline-progress {
-    position: absolute;
-    top: -1px;
-    left: -1px;
-    height: calc(100% + 2px);
-    background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-    transition: width 0.8s cubic-bezier(0.65, 0, 0.35, 1);
-    border-radius: var(--radius-xl);
-}
-
+/* The row of phase dots + connecting line */
 .timeline-phases {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;   /* align tops so dots are on the same row */
     position: relative;
     z-index: 2;
 }
 
+/* Connecting line drawn through the center of the dots */
+.timeline-phases::before {
+    content: '';
+    position: absolute;
+    top: 6px;                  /* half of dot height (12px / 2) */
+    left: 6px;                 /* inset by half dot width so line starts at dot center */
+    right: 6px;
+    height: 2px;
+    background: var(--border-color);
+    z-index: 0;
+}
+
+/* Progress fill overlay on the connecting line */
+.timeline-track {
+    display: none; /* replaced by ::before + .timeline-progress-overlay */
+}
+
+.timeline-progress {
+    display: none; /* progress handled via JS-driven width on .timeline-phases::after */
+}
+
+/* Each phase item: dot on top, label centered below */
 .phase-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    width: 140px;
+    flex: 1;                   /* equal width for every phase */
+    min-width: 0;              /* allow shrink on small screens */
+    position: relative;
+    z-index: 2;
 }
 
 .phase-node {
     width: 12px;
     height: 12px;
+    flex-shrink: 0;
     background: #fff;
     border: 2px solid var(--border-color);
     border-radius: 50%;
     transition: all 0.2s ease;
+    position: relative;
+    z-index: 3;
 }
 
 .phase-item.active .phase-node {
@@ -354,42 +361,49 @@ button {
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    text-align: center;        /* center label under its dot */
+    line-height: 1.3;
+    word-break: break-word;
 }
 
 .phase-item.active .phase-label {
     color: var(--accent-primary);
 }
 
+/* Status info row below the timeline */
 .timeline-status-info {
     display: flex;
     justify-content: center;
-    gap: var(--gap-xl);
-    margin-top: var(--spacing-sm);
+    align-items: center;
+    gap: 24px;
+    margin-top: 4px;
+    flex-wrap: wrap;
 }
 
 .status-group {
     display: flex;
     align-items: center;
-    gap: var(--gap-sm);
+    gap: 6px;
 }
 
 .status-prefix {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 800;
     color: var(--text-secondary);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
 .status-value {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 700;
     text-transform: uppercase;
 }
 
-.status-value.status-active { color: var(--accent-primary); }
-.status-value.status-completed { color: var(--success); }
-.status-value.next-phase { color: var(--text-secondary); opacity: 0.7; }
-.status-value.finale { color: var(--accent-secondary); }
+.status-value.status-active    { color: var(--accent-primary); }
+.status-value.status-completed  { color: var(--success); }
+.status-value.next-phase        { color: var(--text-secondary); }
+.status-value.finale            { color: var(--accent-secondary); }
 
 .timeline-placeholder {
     color: var(--text-secondary);
