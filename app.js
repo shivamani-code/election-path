@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         new TimelineBar('timeline-container');
         new ScenarioEngine();
         new AssistantPanel('assistant-prompts', 'assistant-response');
-        new ProgressTracker('progress-tracker-container');
+        new ProgressTracker('progress-container');
 
         // Global State Listener for App-Level UI
         const debounceUpdate = debounce((state) => {
@@ -116,6 +116,7 @@ function initLandingPageListeners() {
     document.querySelectorAll('.role-card').forEach(card => {
         const handleSelection = () => {
             const role = card.getAttribute('data-role');
+            if (window.analytics) window.analytics.trackRoleSelection(role);
             if (window.stateManager) window.stateManager.setRole(role);
         };
 
