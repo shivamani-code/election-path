@@ -45,7 +45,7 @@ class ProgressTracker {
                 <div class="progress-stats">
                     <div class="progress-info">
                         <span class="progress-count">${completedCount} of ${totalSteps} milestones achieved</span>
-                        <span class="progress-status status-${statusText.split(' ')[0].toLowerCase()}">Status: ${statusText}</span>
+                        <span class="progress-status status-${statusText.split(' ')[0].toLowerCase()}">${statusText}</span>
                     </div>
                     <span class="progress-percentage">${Math.round(progressPercent)}%</span>
                 </div>
