@@ -6,11 +6,18 @@ class StepEngine {
     constructor(listContainerId, cardContainerId) {
         this.listContainer = document.getElementById(listContainerId);
         this.cardContainer = document.getElementById(cardContainerId);
+        this.advanceTimer = null;
         
         window.stateManager.subscribe((state) => this.render(state));
     }
 
     render(state) {
+        // Clear any pending auto-advancements when state changes
+        if (this.advanceTimer) {
+            clearTimeout(this.advanceTimer);
+            this.advanceTimer = null;
+        }
+
         if (!state.role || !state.flows[state.role]) {
             this.clearContent();
             return;
@@ -139,9 +146,10 @@ class StepEngine {
                 
                 window.stateManager.completeStep(step.id);
                 
-                setTimeout(() => {
+                this.advanceTimer = setTimeout(() => {
                     if (cardInner) cardInner.classList.remove('pulse-glow');
                     if (hasNext) this.jumpToStep(steps[stepIndex + 1].id);
+                    this.advanceTimer = null;
                 }, 1500);
             });
         }

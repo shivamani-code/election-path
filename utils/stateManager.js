@@ -4,7 +4,9 @@
  */
 class StateManager {
     constructor() {
-        this.state = {
+        const savedState = this._loadFromStorage();
+        
+        this.state = savedState || {
             role: null, // 'voter', 'candidate', 'officer'
             currentStepId: 1,
             completedSteps: [],
@@ -14,6 +16,19 @@ class StateManager {
         };
         this.prevState = null;
         this.listeners = [];
+    }
+
+    _loadFromStorage() {
+        try {
+            const data = localStorage.getItem('election_os_state');
+            return data ? JSON.parse(data) : null;
+        } catch (e) { return null; }
+    }
+
+    _saveToStorage() {
+        try {
+            localStorage.setItem('election_os_state', JSON.stringify(this.state));
+        } catch (e) {}
     }
 
     async loadFlows() {
@@ -44,6 +59,7 @@ class StateManager {
     updateState(newStateProps) {
         this.prevState = { ...this.state };
         this.state = { ...this.state, ...newStateProps };
+        this._saveToStorage();
         this.notify();
     }
 

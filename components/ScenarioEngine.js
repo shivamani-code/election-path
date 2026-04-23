@@ -15,6 +15,11 @@ class ScenarioEngine {
     }
 
     startSimulation(step) {
+        if (!window.Validator.isValidStep(step)) {
+            console.warn('ScenarioEngine: Attempted to start simulation with invalid step.');
+            return;
+        }
+
         this.isSimulating = true;
         this.currentStep = step;
         window.stateManager.updateState({ isSimulating: true });
