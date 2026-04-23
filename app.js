@@ -4,8 +4,6 @@
  */
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        console.log(`${window.CONFIG.APP_NAME} v${window.CONFIG.VERSION} Initializing...`);
-
         // Load and validate initial data
         if (window.stateManager) {
             await window.stateManager.loadFlows();
@@ -27,9 +25,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         new AssistantPanel('assistant-prompts', 'assistant-response');
         new ProgressTracker('progress-tracker-container');
 
-        // Dev Components
-        if (window.DevToolbar) new DevToolbar();
-
         // Global State Listener for App-Level UI
         const debounceUpdate = debounce((state) => {
             updateDashboardVisibility(state);
@@ -38,8 +33,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.stateManager.subscribe(debounceUpdate);
 
         initLandingPageListeners();
-
-        console.log(`${window.CONFIG.APP_NAME} Ready.`);
     } catch (error) {
         window.ErrorHandler.handle(error);
     }

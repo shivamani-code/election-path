@@ -93,11 +93,11 @@
         
         <!-- Celebration Overlay -->
         <div id="celebration-overlay" class="glass-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="celebration-title">
-            <div class="celebration-card glass animate-scale-up" style="text-align: center; border-color: var(--success);">
-                <div style="font-size: 5rem; margin-bottom: 1rem;" aria-hidden="true">🎉</div>
-                <h2 id="celebration-title" style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--success);">Congratulations!</h2>
-                <p style="font-size: 1.2rem; color: var(--text-primary); margin-bottom: 2rem;">You have successfully completed the entire election process.</p>
-                <button class="btn-primary" onclick="window.location.reload()" style="font-size: 1.1rem; padding: 1rem 2rem;">Start New Journey</button>
+            <div class="celebration-card glass animate-scale-up">
+                <div class="celebration-icon" aria-hidden="true">🎉</div>
+                <h2 id="celebration-title">Congratulations!</h2>
+                <p>You have successfully completed the entire election process.</p>
+                <button class="btn-primary" onclick="window.location.reload()">Start New Journey</button>
             </div>
         </div>
     </div>
@@ -119,19 +119,7 @@
     <script src="components/ScenarioEngine.js"></script>
     <script src="components/AssistantPanel.js"></script>
     <script src="components/ProgressTracker.js"></script>
-    <script src="components/DevToolbar.js"></script>
-    <script src="utils/tester.js"></script>
     <script src="app.js"></script>
-
-    <script>
-        // Landing Page Event Listeners
-        document.querySelectorAll('.role-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const role = card.getAttribute('data-role');
-                window.stateManager.setRole(role);
-            });
-        });
-    </script>
 </body>
 </html>
 

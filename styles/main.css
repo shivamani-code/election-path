@@ -940,6 +940,67 @@ button:hover {
     animation: pulseWarning 2s infinite;
 }
 
+/* Premium Polish: Celebration Modal */
+.celebration-card {
+    width: 90%;
+    max-width: 550px;
+    padding: 3rem;
+    text-align: center;
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    box-shadow: 0 0 50px rgba(16, 185, 129, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.celebration-icon {
+    font-size: 5rem;
+    margin-bottom: 0.5rem;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+}
+
+.celebration-card h2 {
+    font-size: 2.5rem;
+    color: var(--success);
+    margin: 0;
+}
+
+.celebration-card p {
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
+}
+
+/* Global Interaction Polish */
+.btn-primary, .btn-secondary, .btn-warning, .prompt-chip, .role-card {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.role-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-primary);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.prompt-chip:hover {
+    background: var(--accent-secondary);
+    color: #fff;
+    transform: scale(1.05);
+}
+
+
 /* Accessibility: Focus States */
 :focus-visible {
     outline: 3px solid var(--accent-primary);

@@ -21,10 +21,6 @@ class AnalyticsTracker {
         if (this.fbService) {
             this.fbService.logEvent(eventName, params);
         }
-
-        if (!this.gaInitialized && !this.fbService.initialized) {
-            console.log(`[Mock Analytics] Event: ${eventName}`, params);
-        }
     }
 
     trackRoleSelection(role) {

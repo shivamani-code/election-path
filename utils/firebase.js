@@ -24,10 +24,10 @@ window.FirebaseService = {
                     this.analytics = window.firebase.analytics();
                 }
                 this.initialized = true;
-                console.log('FirebaseService: Initialized successfully.');
+                this.initialized = true;
             }
         } catch (error) {
-            console.warn('FirebaseService: Initialization skipped or failed (likely due to placeholder config).');
+            // Silently skip if config is placeholder
         }
     },
 
@@ -40,6 +40,5 @@ window.FirebaseService = {
         if (this.initialized && this.analytics) {
             this.analytics.logEvent(eventName, params);
         }
-        console.log(`[Firebase Log] Event: ${eventName}`, params);
     }
 };
