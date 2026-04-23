@@ -5,16 +5,23 @@
 class StateManager {
     constructor() {
         const savedState = this._loadFromStorage();
-        
-        this.state = savedState || {
-            role: null, // 'voter', 'candidate', 'officer'
+
+        this.state = {
+            // Always start on landing screen — role must be re-selected each session
+            role: null,
+            currentView: 'landing',
             currentStepId: 1,
             completedSteps: [],
             flows: {},
             history: [],
             isSimulating: false,
-            hasCompletedJourney: false
+            hasCompletedJourney: false,
+            // Carry over any saved non-role state if available
+            ...(savedState ? {
+                flows: savedState.flows || {}
+            } : {})
         };
+
         this.prevState = null;
         this.listeners = [];
     }
@@ -28,7 +35,9 @@ class StateManager {
 
     _saveToStorage() {
         try {
-            localStorage.setItem('election_os_state', JSON.stringify(this.state));
+            // Save state but strip role so landing always shows on reload
+            const toSave = { ...this.state, role: null, currentView: 'landing' };
+            localStorage.setItem('election_os_state', JSON.stringify(toSave));
         } catch (e) {}
     }
 
@@ -43,10 +52,18 @@ class StateManager {
     setRole(role) {
         this.updateState({
             role: role,
+            currentView: 'dashboard',
             currentStepId: 1,
             completedSteps: [],
             isSimulating: false,
             hasCompletedJourney: false
+        });
+    }
+
+    goToLanding() {
+        this.updateState({
+            role: null,
+            currentView: 'landing'
         });
     }
 
@@ -57,7 +74,7 @@ class StateManager {
             });
         }
     }
-    
+
     updateState(newStateProps) {
         this.prevState = { ...this.state };
         this.state = { ...this.state, ...newStateProps };
@@ -82,4 +99,3 @@ class StateManager {
 
 // Global instance
 window.stateManager = new StateManager();
-

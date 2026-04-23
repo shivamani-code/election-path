@@ -54,29 +54,46 @@ function debounce(func, wait) {
 }
 
 /**
- * Handles visibility between Landing Page and Dashboard
+ * Handles visibility between Landing Page and Dashboard.
+ * Uses state.currentView ("landing" | "dashboard") as the source of truth.
  */
 function updateDashboardVisibility(state) {
     const landing = document.getElementById('landing-page');
     const dashboard = document.getElementById('dashboard-content');
     const celebration = document.getElementById('celebration-overlay');
-    
-    if (!state.role) {
-        landing.style.display = 'flex';
-        dashboard.style.display = 'none';
-        celebration.style.display = 'none';
-    } else {
-        landing.style.display = 'none';
-        dashboard.style.display = 'flex';
 
-        // Check for final completion
+    if (state.currentView === 'dashboard' && state.role) {
+        // Fade landing out, fade dashboard in
+        if (landing.style.display !== 'none') {
+            landing.style.opacity = '0';
+            landing.style.transition = 'opacity 0.3s ease';
+            setTimeout(() => {
+                landing.style.display = 'none';
+                landing.style.opacity = '';
+                landing.style.transition = '';
+                dashboard.style.display = 'flex';
+                dashboard.style.opacity = '0';
+                dashboard.style.transition = 'opacity 0.3s ease';
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        dashboard.style.opacity = '1';
+                        setTimeout(() => {
+                            dashboard.style.opacity = '';
+                            dashboard.style.transition = '';
+                        }, 300);
+                    });
+                });
+            }, 300);
+        } else {
+            dashboard.style.display = 'flex';
+        }
+
+        // Check for journey completion
         const steps = state.flows[state.role] || [];
         if (steps.length > 0 && state.completedSteps.length === steps.length) {
-            // Guard: Only show if not already completed in this session
             if (!state.hasCompletedJourney) {
                 window.stateManager.updateState({ hasCompletedJourney: true });
                 if (window.analytics) window.analytics.trackJourneyCompletion();
-                
                 setTimeout(() => {
                     celebration.style.display = 'flex';
                     celebration.focus();
@@ -85,6 +102,12 @@ function updateDashboardVisibility(state) {
         } else {
             celebration.style.display = 'none';
         }
+
+    } else {
+        // Show landing, hide dashboard
+        dashboard.style.display = 'none';
+        celebration.style.display = 'none';
+        landing.style.display = 'flex';
     }
 }
 
@@ -106,9 +129,7 @@ function initLandingPageListeners() {
     if (resetBtn) {
         resetBtn.onclick = () => {
             if (window.stateManager) {
-                // Clear state and reload
-                localStorage.removeItem('election_os_state');
-                window.location.reload();
+                window.stateManager.goToLanding();
             }
         };
     }
