@@ -1,0 +1,75 @@
+/**
+ * ScenarioEngine Component
+ * Handles the "What If" simulation overlays to show consequences of missed steps.
+ */
+class ScenarioEngine {
+    constructor() {
+        this.container = document.body; // Render as overlay on body
+        this.isSimulating = false;
+        this.currentStep = null;
+        
+        // Listen for simulation triggers via a custom event
+        window.addEventListener('trigger_simulation', (e) => {
+            this.startSimulation(e.detail.step);
+        });
+    }
+
+    startSimulation(step) {
+        this.isSimulating = true;
+        this.currentStep = step;
+        window.stateManager.state.isSimulating = true;
+        window.stateManager.notify();
+        this.render();
+    }
+
+    stopSimulation() {
+        this.isSimulating = false;
+        this.currentStep = null;
+        window.stateManager.state.isSimulating = false;
+        window.stateManager.notify();
+        const overlay = document.getElementById('scenario-overlay');
+        if (overlay) overlay.remove();
+    }
+
+    render() {
+        if (!this.isSimulating || !this.currentStep) return;
+
+        const overlay = document.createElement('div');
+        overlay.id = 'scenario-overlay';
+        overlay.className = 'glass-overlay animate-fade-in';
+        
+        overlay.innerHTML = `
+            <div class="scenario-card glass animate-scale-up">
+                <div class="scenario-header">
+                    <span class="warning-icon">⚠️</span>
+                    <h2>Simulation: Deadline Missed</h2>
+                </div>
+                <div class="scenario-body">
+                    <p class="scenario-context">You missed the deadline for: <strong>${this.currentStep.title}</strong></p>
+                    <div class="scenario-impact">
+                        <span class="impact-label">CONSEQUENCE:</span>
+                        <p class="impact-text">${this.currentStep.missed}</p>
+                    </div>
+                    <div class="scenario-next-action" style="margin-top: 1.5rem; padding: 1rem; background: rgba(59, 130, 246, 0.1); border-left: 4px solid var(--accent-primary); border-radius: 4px;">
+                        <span class="impact-label" style="color: var(--accent-primary);">NEXT POSSIBLE ACTION:</span>
+                        <p style="color: #fff; font-weight: 600;">${this.currentStep.nextAction || 'Contact support for guidance.'}</p>
+                    </div>
+                </div>
+                <div class="scenario-footer" style="margin-top: 2rem;">
+                    <button class="btn-warning" id="btn-retry">Acknowledge & Return</button>
+                </div>
+            </div>
+        `;
+
+        this.container.appendChild(overlay);
+
+        overlay.querySelector('#btn-retry').addEventListener('click', () => {
+            this.stopSimulation();
+        });
+    }
+}
+
+window.ScenarioEngine = ScenarioEngine;
+
+
+

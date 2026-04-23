@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElectionOS — Interactive Election Journey Assistant</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Landing Page Section -->
+        <div id="landing-page" class="landing-page">
+            <div class="landing-content animate-fade-in">
+                <h1 class="landing-title">Election<span>OS</span></h1>
+                <p class="landing-subtitle">Master your election journey with interactive guidance and real-time consequence simulation.</p>
+                
+                <div class="role-cards">
+                    <div class="role-card glass animate-slide-up" data-role="voter" style="animation-delay: 0.1s">
+                        <div class="role-card-icon">👤</div>
+                        <h3>Voter</h3>
+                        <p>Learn how to register, find your polling station, and cast your vote.</p>
+                        <button class="btn-primary">Start as Voter</button>
+                    </div>
+                    <div class="role-card glass animate-slide-up" data-role="candidate" style="animation-delay: 0.2s">
+                        <div class="role-card-icon">📢</div>
+                        <h3>Candidate</h3>
+                        <p>Navigate nominations, campaigning, and election day requirements.</p>
+                        <button class="btn-primary">Start as Candidate</button>
+                    </div>
+                    <div class="role-card glass animate-slide-up" data-role="officer" style="animation-delay: 0.3s">
+                        <div class="role-card-icon">⚖️</div>
+                        <h3>Officer</h3>
+                        <p>Manage stations, oversee voting, and ensure process integrity.</p>
+                        <button class="btn-primary">Start as Officer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Content (hidden until role is selected) -->
+        <div id="dashboard-content" style="display: none; flex-direction: column; height: 100%;">
+            <header class="glass">
+                <div class="logo">ElectionOS</div>
+                <div id="role-selector-container"></div>
+            </header>
+
+            <div id="system-voice-panel"></div>
+            <div id="timeline-container" class="glass"></div>
+
+            <main>
+                <section id="steps-sidebar" class="glass">
+                    <h3 style="margin-bottom: 1rem; color: var(--accent-primary);">Journey Steps</h3>
+                    <div id="steps-list"></div>
+                </section>
+
+                <section id="interaction-area">
+                    <div id="active-step-card" class="glass card">
+                        <h2 id="step-title">Welcome to ElectionOS</h2>
+                        <p id="step-description">Please select a role above to begin your interactive election journey.</p>
+                        <div id="step-actions"></div>
+                    </div>
+                    <div id="scenario-engine-container"></div>
+                </section>
+
+                <section id="assistant-panel" class="glass">
+                    <h3 style="margin-bottom: 1rem; color: var(--accent-secondary);">Smart Assistant</h3>
+                    <div id="assistant-prompts"></div>
+                    <div id="assistant-response" style="display: none;"></div>
+                </section>
+            </main>
+
+            <footer class="glass">
+                <div id="progress-tracker-container" style="flex: 1;"></div>
+            </footer>
+        </div>
+        
+        <!-- Celebration Overlay (hidden) -->
+        <div id="celebration-overlay" class="glass-overlay" style="display: none;">
+            <div class="celebration-card glass animate-scale-up" style="text-align: center; border-color: var(--success); box-shadow: 0 0 50px rgba(16, 185, 129, 0.2);">
+                <div style="font-size: 5rem; margin-bottom: 1rem;">🎉</div>
+                <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--success);">Congratulations!</h2>
+                <p style="font-size: 1.2rem; color: var(--text-primary); margin-bottom: 2rem;">You have successfully completed the entire election process.</p>
+                <button class="btn-primary" onclick="window.location.reload()" style="font-size: 1.1rem; padding: 1rem 2rem;">Start New Journey</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts (Ordered by dependency) -->
+    <script src="data/data.js"></script>
+    <script src="utils/stateManager.js"></script>
+    <script src="utils/promptEngine.js"></script>
+    <script src="components/RoleSelector.js"></script>
+    <script src="components/SystemVoice.js"></script>
+    <script src="components/StepEngine.js"></script>
+    <script src="components/TimelineBar.js"></script>
+    <script src="components/ScenarioEngine.js"></script>
+    <script src="components/AssistantPanel.js"></script>
+    <script src="components/ProgressTracker.js"></script>
+    <script src="components/DevToolbar.js"></script>
+    <script src="utils/tester.js"></script>
+    <script src="app.js"></script>
+
+    <script>
+        // Landing Page Event Listeners
+        document.querySelectorAll('.role-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const role = card.getAttribute('data-role');
+                window.stateManager.setRole(role);
+            });
+        });
+    </script>
+</body>
+</html>
+
