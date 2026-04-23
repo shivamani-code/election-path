@@ -15,6 +15,9 @@ class ScenarioEngine {
     }
 
     startSimulation(step) {
+        // Guard: prevent duplicate overlays from rapid clicks
+        if (this.isSimulating) return;
+        
         if (!window.Validator.isValidStep(step)) {
             console.warn('ScenarioEngine: Attempted to start simulation with invalid step.');
             return;
@@ -37,12 +40,19 @@ class ScenarioEngine {
     render() {
         if (!this.isSimulating || !this.currentStep) return;
 
+        // Remove any existing overlay before creating a new one (idempotent)
+        const existing = document.getElementById('scenario-overlay');
+        if (existing) existing.remove();
+
         const overlay = document.createElement('div');
         overlay.id = 'scenario-overlay';
         overlay.className = 'glass-overlay animate-fade-in';
-        
+        overlay.setAttribute('role', 'dialog');
+        overlay.setAttribute('aria-modal', 'true');
+        overlay.setAttribute('aria-label', 'Scenario Simulation');
+
         overlay.innerHTML = `
-            <div class="scenario-card glass animate-scale-up">
+            <div class="scenario-card glass animate-slide-up">
                 <div class="scenario-header">
                     <span class="warning-icon">⚠️</span>
                     <h2>Simulation: Deadline Missed</h2>
@@ -50,16 +60,16 @@ class ScenarioEngine {
                 <div class="scenario-body">
                     <p class="scenario-context">You missed the deadline for: <strong>${this.currentStep.title}</strong></p>
                     <div class="scenario-impact">
-                        <span class="impact-label danger">CONSEQUENCE:</span>
+                        <span class="impact-label danger">Consequence:</span>
                         <p class="impact-text">${this.currentStep.missed}</p>
                     </div>
                     <div class="scenario-next-action">
-                        <span class="impact-label accent">NEXT POSSIBLE ACTION:</span>
-                        <p style="color: #fff; font-weight: 600;">${this.currentStep.nextAction || 'Contact support for guidance.'}</p>
+                        <span class="impact-label accent">Next Possible Action:</span>
+                        <p class="impact-text">${this.currentStep.nextAction || 'Contact support for guidance.'}</p>
                     </div>
                 </div>
                 <div class="scenario-footer">
-                    <button class="btn-danger" id="btn-retry">Acknowledge & Return</button>
+                    <button class="btn-danger" id="btn-retry">Acknowledge &amp; Return</button>
                 </div>
             </div>
         `;

@@ -137,7 +137,6 @@ function initLandingPageListeners() {
     document.querySelectorAll('.role-card').forEach(card => {
         const handleSelection = () => {
             const role = card.getAttribute('data-role');
-            if (window.analytics) window.analytics.trackRoleSelection(role);
             if (window.stateManager) window.stateManager.setRole(role);
         };
 

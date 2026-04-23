@@ -824,6 +824,11 @@ button {
     animation: fadeIn 0.3s ease forwards;
 }
 
+/* Alias for backwards compatibility */
+.animate-stagger {
+    animation: fadeIn 0.3s ease forwards;
+}
+
 @keyframes slideUp {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -831,6 +836,12 @@ button {
 
 .animate-slide-up {
     animation: slideUp 0.3s ease forwards;
+}
+
+/* System Voice Panel */
+#system-voice-panel {
+    padding: 0 var(--spacing-lg);
+    margin-bottom: 8px;
 }
 
 /* Scrollbar */

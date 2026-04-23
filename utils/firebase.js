@@ -24,7 +24,6 @@ window.FirebaseService = {
                     this.analytics = window.firebase.analytics();
                 }
                 this.initialized = true;
-                this.initialized = true;
             }
         } catch (error) {
             // Silently skip if config is placeholder

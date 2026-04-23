@@ -43,8 +43,7 @@ class StepEngine {
 
     _generateStepItemHTML(step, index, isActive, isCompleted) {
         return `
-            <div class="step-item animate-stagger ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}" 
-                 style="animation-delay: ${index * 0.1}s"
+            <div class="step-item animate-fade-in ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}" 
                  data-id="${step.id}"
                  role="button"
                  tabindex="0"
