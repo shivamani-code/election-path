@@ -18,6 +18,8 @@ class ElectionTester {
         await this.testScenarioWithoutStep();
         await this.testAssistantResponses();
         await this.testEmptyDataHandling();
+        await this.testFirebaseLogging();
+        await this.testBrokenDataRecovery();
         console.groupEnd();
         console.log('✅ Health check complete.');
     }

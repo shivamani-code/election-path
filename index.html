@@ -17,55 +17,60 @@
         gtag('js', new Date());
         gtag('config', 'G-XXXXXXXXXX');
     </script>
+
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <!-- Firebase Analytics (optional) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
 </head>
 <body>
-    <div id="app">
+    <div id="app" role="application">
         <!-- Landing Page Section -->
-        <div id="landing-page" class="landing-page">
+        <section id="landing-page" class="landing-page" aria-labelledby="landing-title">
             <div class="landing-content animate-fade-in">
-                <h1 class="landing-title">Election<span>OS</span></h1>
+                <h1 id="landing-title" class="landing-title">Election<span>OS</span></h1>
                 <p class="landing-subtitle">Master your election journey with interactive guidance and real-time consequence simulation.</p>
                 
-                <div class="role-cards">
-                    <div class="role-card glass animate-slide-up" data-role="voter" style="animation-delay: 0.1s">
-                        <div class="role-card-icon">👤</div>
+                <div class="role-cards" role="list">
+                    <div class="role-card glass animate-slide-up" data-role="voter" role="listitem" tabindex="0" style="animation-delay: 0.1s" aria-label="Start as Voter">
+                        <div class="role-card-icon" aria-hidden="true">👤</div>
                         <h3>Voter</h3>
                         <p>Learn how to register, find your polling station, and cast your vote.</p>
-                        <button class="btn-primary">Start as Voter</button>
+                        <button class="btn-primary" tabindex="-1">Start as Voter</button>
                     </div>
-                    <div class="role-card glass animate-slide-up" data-role="candidate" style="animation-delay: 0.2s">
-                        <div class="role-card-icon">📢</div>
+                    <div class="role-card glass animate-slide-up" data-role="candidate" role="listitem" tabindex="0" style="animation-delay: 0.2s" aria-label="Start as Candidate">
+                        <div class="role-card-icon" aria-hidden="true">📢</div>
                         <h3>Candidate</h3>
                         <p>Navigate nominations, campaigning, and election day requirements.</p>
-                        <button class="btn-primary">Start as Candidate</button>
+                        <button class="btn-primary" tabindex="-1">Start as Candidate</button>
                     </div>
-                    <div class="role-card glass animate-slide-up" data-role="officer" style="animation-delay: 0.3s">
-                        <div class="role-card-icon">⚖️</div>
+                    <div class="role-card glass animate-slide-up" data-role="officer" role="listitem" tabindex="0" style="animation-delay: 0.3s" aria-label="Start as Officer">
+                        <div class="role-card-icon" aria-hidden="true">⚖️</div>
                         <h3>Officer</h3>
                         <p>Manage stations, oversee voting, and ensure process integrity.</p>
-                        <button class="btn-primary">Start as Officer</button>
+                        <button class="btn-primary" tabindex="-1">Start as Officer</button>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Dashboard Content (hidden until role is selected) -->
+        <!-- Dashboard Content -->
         <div id="dashboard-content" style="display: none; flex-direction: column; height: 100%;">
-            <header class="glass">
+            <header class="glass" role="banner">
                 <div class="logo">ElectionOS</div>
-                <div id="role-selector-container"></div>
+                <nav id="role-selector-container" aria-label="Role Navigation"></nav>
             </header>
 
-            <div id="system-voice-panel"></div>
-            <div id="timeline-container" class="glass"></div>
+            <aside id="system-voice-panel" aria-live="polite"></aside>
+            <section id="timeline-container" class="glass" aria-label="Election Timeline"></section>
 
-            <main>
-                <section id="steps-sidebar" class="glass">
-                    <h3 style="margin-bottom: 1rem; color: var(--accent-primary);">Journey Steps</h3>
-                    <div id="steps-list"></div>
+            <main role="main">
+                <section id="steps-sidebar" class="glass" aria-labelledby="sidebar-title">
+                    <h3 id="sidebar-title" style="margin-bottom: 1rem; color: var(--accent-primary);">Journey Steps</h3>
+                    <nav id="steps-list" aria-label="Steps Navigation"></nav>
                 </section>
 
-                <section id="interaction-area">
+                <section id="interaction-area" aria-labelledby="step-title">
                     <div id="active-step-card" class="glass card">
                         <h2 id="step-title">Welcome to ElectionOS</h2>
                         <p id="step-description">Please select a role above to begin your interactive election journey.</p>
@@ -74,33 +79,37 @@
                     <div id="scenario-engine-container"></div>
                 </section>
 
-                <section id="assistant-panel" class="glass">
-                    <h3 style="margin-bottom: 1rem; color: var(--accent-secondary);">Smart Assistant</h3>
+                <section id="assistant-panel" class="glass" aria-labelledby="assistant-title">
+                    <h3 id="assistant-title" style="margin-bottom: 1rem; color: var(--accent-secondary);">Smart Assistant</h3>
                     <div id="assistant-prompts"></div>
-                    <div id="assistant-response" style="display: none;"></div>
+                    <div id="assistant-response" style="display: none;" aria-live="polite"></div>
                 </section>
             </main>
 
-            <footer class="glass">
+            <footer class="glass" role="contentinfo">
                 <div id="progress-tracker-container" style="flex: 1;"></div>
             </footer>
         </div>
         
-        <!-- Celebration Overlay (hidden) -->
-        <div id="celebration-overlay" class="glass-overlay" style="display: none;">
-            <div class="celebration-card glass animate-scale-up" style="text-align: center; border-color: var(--success); box-shadow: 0 0 50px rgba(16, 185, 129, 0.2);">
-                <div style="font-size: 5rem; margin-bottom: 1rem;">🎉</div>
-                <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--success);">Congratulations!</h2>
+        <!-- Celebration Overlay -->
+        <div id="celebration-overlay" class="glass-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="celebration-title">
+            <div class="celebration-card glass animate-scale-up" style="text-align: center; border-color: var(--success);">
+                <div style="font-size: 5rem; margin-bottom: 1rem;" aria-hidden="true">🎉</div>
+                <h2 id="celebration-title" style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--success);">Congratulations!</h2>
                 <p style="font-size: 1.2rem; color: var(--text-primary); margin-bottom: 2rem;">You have successfully completed the entire election process.</p>
                 <button class="btn-primary" onclick="window.location.reload()" style="font-size: 1.1rem; padding: 1rem 2rem;">Start New Journey</button>
             </div>
         </div>
     </div>
 
-    <!-- Scripts (Ordered by dependency) -->
+    <!-- Scripts (Enterprise Order) -->
+    <script src="config/constants.js"></script>
     <script src="data/data.js"></script>
     <script src="utils/domHelpers.js"></script>
+    <script src="utils/errorHandler.js"></script>
+    <script src="utils/validator.js"></script>
     <script src="utils/analytics.js"></script>
+    <script src="utils/firebase.js"></script>
     <script src="utils/stateManager.js"></script>
     <script src="utils/promptEngine.js"></script>
     <script src="components/RoleSelector.js"></script>

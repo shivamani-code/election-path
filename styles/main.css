@@ -940,4 +940,18 @@ button:hover {
     animation: pulseWarning 2s infinite;
 }
 
+/* Accessibility: Focus States */
+:focus-visible {
+    outline: 3px solid var(--accent-primary);
+    outline-offset: 4px;
+    box-shadow: 0 0 15px var(--accent-primary);
+}
+
+.role-card:focus-visible, .role-btn:focus-visible, .prompt-chip:focus-visible, .btn-primary:focus-visible, .step-item:focus-visible {
+    outline: 30px solid transparent; /* Buffer */
+    outline: 3px solid #fff;
+    border-radius: 12px;
+}
+
+
 

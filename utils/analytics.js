@@ -1,55 +1,54 @@
-/**
- * AnalyticsTracker
- * Wrapper service for tracking user interactions via Google Analytics (gtag.js).
- */
 class AnalyticsTracker {
     constructor() {
-        this.initialized = typeof window.gtag === 'function';
-        if (!this.initialized) {
-            console.warn('AnalyticsTracker: Google Analytics (gtag) is not loaded.');
-        } else {
-            console.log('AnalyticsTracker: Initialized successfully.');
-        }
+        this.gaInitialized = typeof window.gtag === 'function';
+        this.fbService = window.FirebaseService;
+        
+        if (this.fbService) this.fbService.init();
     }
 
     /**
-     * Safely dispatches an event to Google Analytics.
+     * Safely dispatches an event to GA and Firebase.
      * @param {string} eventName 
      * @param {object} params 
      */
     trackEvent(eventName, params = {}) {
-        if (this.initialized) {
+        // Track to Google Analytics
+        if (this.gaInitialized) {
             window.gtag('event', eventName, params);
-        } else {
-            // Mock output for testing/validation without real GA
+        }
+        
+        // Track to Firebase
+        if (this.fbService) {
+            this.fbService.logEvent(eventName, params);
+        }
+
+        if (!this.gaInitialized && !this.fbService.initialized) {
             console.log(`[Mock Analytics] Event: ${eventName}`, params);
         }
     }
 
     trackRoleSelection(role) {
-        this.trackEvent('select_content', {
-            content_type: 'role',
-            item_id: role
+        this.trackEvent(window.CONFIG.EVENTS.ROLE_SELECT, {
+            role: role
         });
     }
 
     trackStepCompletion(stepId) {
-        this.trackEvent('level_up', {
-            level: stepId,
-            character: window.stateManager.state.role || 'unknown'
+        this.trackEvent(window.CONFIG.EVENTS.STEP_COMPLETE, {
+            step_id: stepId,
+            role: window.stateManager.state.role || 'unknown'
         });
     }
 
     trackScenarioTrigger(stepTitle) {
-        this.trackEvent('select_promotion', {
-            promoted_id: 'scenario_missed_deadline',
-            promoted_name: stepTitle
+        this.trackEvent(window.CONFIG.EVENTS.SCENARIO_TRIGGER, {
+            step_title: stepTitle
         });
     }
 
     trackAssistantUsage(promptId) {
-        this.trackEvent('search', {
-            search_term: promptId
+        this.trackEvent(window.CONFIG.EVENTS.ASSISTANT_ASK, {
+            prompt_id: promptId
         });
     }
 }
