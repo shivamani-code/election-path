@@ -94,10 +94,13 @@
         <!-- Celebration Overlay -->
         <div id="celebration-overlay" class="glass-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="celebration-title">
             <div class="celebration-card glass animate-scale-up">
+                <button class="close-popup" id="celebration-close" aria-label="Close popup">×</button>
                 <div class="celebration-icon" aria-hidden="true">🎉</div>
                 <h2 id="celebration-title">Congratulations!</h2>
                 <p>You have successfully completed the entire election process.</p>
-                <button class="btn-primary" onclick="window.location.reload()">Start New Journey</button>
+                <div class="celebration-actions">
+                    <button class="btn-primary" id="celebration-reset">Start New Journey</button>
+                </div>
             </div>
         </div>
     </div>

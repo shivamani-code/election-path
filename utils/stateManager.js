@@ -12,7 +12,8 @@ class StateManager {
             completedSteps: [],
             flows: {},
             history: [],
-            isSimulating: false
+            isSimulating: false,
+            hasCompletedJourney: false
         };
         this.prevState = null;
         this.listeners = [];
@@ -44,7 +45,8 @@ class StateManager {
             role: role,
             currentStepId: 1,
             completedSteps: [],
-            isSimulating: false
+            isSimulating: false,
+            hasCompletedJourney: false
         });
     }
 

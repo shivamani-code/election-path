@@ -72,11 +72,16 @@ function updateDashboardVisibility(state) {
         // Check for final completion
         const steps = state.flows[state.role] || [];
         if (steps.length > 0 && state.completedSteps.length === steps.length) {
-            if (window.analytics) window.analytics.trackJourneyCompletion();
-            setTimeout(() => {
-                celebration.style.display = 'flex';
-                celebration.focus(); // Accessibility: focus the modal
-            }, 1000);
+            // Guard: Only show if not already completed in this session
+            if (!state.hasCompletedJourney) {
+                window.stateManager.updateState({ hasCompletedJourney: true });
+                if (window.analytics) window.analytics.trackJourneyCompletion();
+                
+                setTimeout(() => {
+                    celebration.style.display = 'flex';
+                    celebration.focus();
+                }, 1000);
+            }
         } else {
             celebration.style.display = 'none';
         }
@@ -87,6 +92,27 @@ function updateDashboardVisibility(state) {
  * Initialize Landing Page Role Selection
  */
 function initLandingPageListeners() {
+    // Handle Celebration Popup Actions
+    const closeBtn = document.getElementById('celebration-close');
+    const resetBtn = document.getElementById('celebration-reset');
+    const celebration = document.getElementById('celebration-overlay');
+
+    if (closeBtn) {
+        closeBtn.onclick = () => {
+            celebration.style.display = 'none';
+        };
+    }
+
+    if (resetBtn) {
+        resetBtn.onclick = () => {
+            if (window.stateManager) {
+                // Clear state and reload
+                localStorage.removeItem('election_os_state');
+                window.location.reload();
+            }
+        };
+    }
+
     document.querySelectorAll('.role-card').forEach(card => {
         const handleSelection = () => {
             const role = card.getAttribute('data-role');

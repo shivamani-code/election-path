@@ -694,8 +694,8 @@ button:hover {
 }
 
 @keyframes scaleUp {
-    from { opacity: 0; transform: translateX(-50%) scale(0.8); }
-    to { opacity: 1; transform: translateX(-50%) scale(1); }
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
 .animate-scale-up {
@@ -942,16 +942,39 @@ button:hover {
 
 /* Premium Polish: Celebration Modal */
 .celebration-card {
-    width: 90%;
-    max-width: 550px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 550px;
+    max-width: 90%;
     padding: 3rem;
     text-align: center;
     border: 1px solid rgba(16, 185, 129, 0.4);
-    box-shadow: 0 0 50px rgba(16, 185, 129, 0.2);
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.5), 0 0 50px rgba(16, 185, 129, 0.2);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1.5rem;
+    z-index: 9999;
+}
+
+.close-popup {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.close-popup:hover {
+    color: #fff;
 }
 
 .celebration-icon {

@@ -7,11 +7,15 @@ class StepEngine {
         this.listContainer = document.getElementById(listContainerId);
         this.cardContainer = document.getElementById(cardContainerId);
         this.advanceTimer = null;
+        this.isProcessing = false;
         
         window.stateManager.subscribe((state) => this.render(state));
     }
 
     render(state) {
+        // Reset processing flag on new render
+        this.isProcessing = false;
+
         // Clear any pending auto-advancements when state changes
         if (this.advanceTimer) {
             clearTimeout(this.advanceTimer);
@@ -138,6 +142,9 @@ class StepEngine {
         const completeBtn = this.cardContainer.querySelector('#btn-complete');
         if (completeBtn) {
             completeBtn.addEventListener('click', () => {
+                if (this.isProcessing) return;
+                this.isProcessing = true;
+
                 window.domHelpers.showToast(window.CONFIG.STRINGS.COMPLETE_STEP_TOAST);
                 if (window.analytics) window.analytics.trackStepCompletion(step.title);
                 
@@ -147,6 +154,7 @@ class StepEngine {
                 window.stateManager.completeStep(step.id);
                 
                 this.advanceTimer = setTimeout(() => {
+                    this.isProcessing = false;
                     if (cardInner) cardInner.classList.remove('pulse-glow');
                     if (hasNext) this.jumpToStep(steps[stepIndex + 1].id);
                     this.advanceTimer = null;
