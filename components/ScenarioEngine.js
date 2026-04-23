@@ -50,16 +50,16 @@ class ScenarioEngine {
                 <div class="scenario-body">
                     <p class="scenario-context">You missed the deadline for: <strong>${this.currentStep.title}</strong></p>
                     <div class="scenario-impact">
-                        <span class="impact-label">CONSEQUENCE:</span>
+                        <span class="impact-label danger">CONSEQUENCE:</span>
                         <p class="impact-text">${this.currentStep.missed}</p>
                     </div>
-                    <div class="scenario-next-action" style="margin-top: 1.5rem; padding: 1rem; background: rgba(59, 130, 246, 0.1); border-left: 4px solid var(--accent-primary); border-radius: 4px;">
-                        <span class="impact-label" style="color: var(--accent-primary);">NEXT POSSIBLE ACTION:</span>
+                    <div class="scenario-next-action">
+                        <span class="impact-label accent">NEXT POSSIBLE ACTION:</span>
                         <p style="color: #fff; font-weight: 600;">${this.currentStep.nextAction || 'Contact support for guidance.'}</p>
                     </div>
                 </div>
-                <div class="scenario-footer" style="margin-top: 2rem;">
-                    <button class="btn-warning" id="btn-retry">Acknowledge & Return</button>
+                <div class="scenario-footer">
+                    <button class="btn-danger" id="btn-retry">Acknowledge & Return</button>
                 </div>
             </div>
         `;

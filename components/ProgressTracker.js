@@ -41,22 +41,17 @@ class ProgressTracker {
         }
 
         this.container.innerHTML = `
-            <div class="progress-tracker ${isComplete ? 'journey-complete' : ''}">
+            <div class="progress-tracker">
                 <div class="progress-stats">
-                    <div>
+                    <div class="progress-info">
                         <span class="progress-count">${completedCount} of ${totalSteps} milestones achieved</span>
-                        <span style="margin-left: 1rem; color: ${state.isSimulating ? 'var(--warning)' : isBehind ? 'var(--danger)' : 'var(--success)'}; font-size: 0.8rem; font-weight: 700; transition: color 0.3s ease;">Status: ${statusText}</span>
+                        <span class="progress-status status-${statusText.split(' ')[0].toLowerCase()}">Status: ${statusText}</span>
                     </div>
                     <span class="progress-percentage">${Math.round(progressPercent)}%</span>
                 </div>
                 <div class="progress-bar-container">
-                    <div class="progress-bar-fill" style="width: ${progressPercent}%; background: ${state.isSimulating ? 'var(--warning)' : isBehind ? 'linear-gradient(to right, var(--warning), var(--danger))' : ''};"></div>
+                    <div class="progress-bar-fill" style="width: ${progressPercent}%"></div>
                 </div>
-                ${isComplete && !document.getElementById('celebration-overlay')?.style.display.includes('flex') ? `
-                    <div class="completion-badge animate-scale-up">
-                        ✨ Journey Completed! You are ready for Election Day.
-                    </div>
-                ` : ''}
             </div>
         `;
     }

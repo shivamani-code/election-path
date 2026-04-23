@@ -39,7 +39,7 @@ class TimelineBar {
         let nextPhaseLabel = this.phases[0].label;
 
         this.container.innerHTML = `
-            <div class="timeline-wrapper" style="width: 100%;">
+            <div class="timeline-wrapper">
                 <div class="timeline-track">
                     <div class="timeline-progress" style="width: ${progress * 100}%"></div>
                 </div>
@@ -66,15 +66,21 @@ class TimelineBar {
                         `;
                     }).join('')}
                 </div>
-                <div class="timeline-status" style="margin-top: 1.5rem; text-align: center; font-size: 0.85rem; letter-spacing: 0.05em; font-weight: 600;">
-                    <span style="color: var(--text-secondary);">Phase: </span>
-                    <span style="color: ${statusLabel === 'ACTIVE' ? 'var(--accent-primary)' : statusLabel === 'COMPLETED' ? 'var(--success)' : 'var(--text-primary)'}; margin-right: 1rem; text-transform: uppercase;">${activePhaseLabel} (${statusLabel})</span>
+                <div class="timeline-status-info">
+                    <div class="status-group">
+                        <span class="status-prefix">CURRENT PHASE:</span>
+                        <span class="status-value status-${statusLabel.toLowerCase()}">${activePhaseLabel} (${statusLabel})</span>
+                    </div>
                     ${nextPhaseLabel !== 'NONE' ? `
-                        <span style="color: var(--text-secondary);">| Next Phase: </span>
-                        <span style="color: var(--text-secondary); text-transform: uppercase;">${nextPhaseLabel}</span>
+                        <div class="status-group">
+                            <span class="status-prefix">UPCOMING:</span>
+                            <span class="status-value next-phase">${nextPhaseLabel}</span>
+                        </div>
                     ` : `
-                        <span style="color: var(--text-secondary);">| Next Phase: </span>
-                        <span style="color: var(--success); text-transform: uppercase;">AWAITING ELECTION DAY</span>
+                        <div class="status-group">
+                            <span class="status-prefix">FINALE:</span>
+                            <span class="status-value finale">READY FOR ELECTION DAY</span>
+                        </div>
                     `}
                 </div>
             </div>

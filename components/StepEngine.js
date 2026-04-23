@@ -145,7 +145,6 @@ class StepEngine {
                 if (this.isProcessing) return;
                 this.isProcessing = true;
 
-                window.domHelpers.showToast(window.CONFIG.STRINGS.COMPLETE_STEP_TOAST);
                 if (window.analytics) window.analytics.trackStepCompletion(step.title);
                 
                 const cardInner = this.cardContainer.firstElementChild;
