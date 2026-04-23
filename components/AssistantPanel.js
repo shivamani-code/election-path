@@ -33,9 +33,11 @@ class AssistantPanel {
         if (!this.promptsContainer) return;
 
         this.promptsContainer.innerHTML = `
-            <div class="prompt-chips">
+            <div class="prompt-chips" role="group" aria-label="Assistant help options">
                 ${window.promptEngine.prompts.map(p => `
-                    <button class="prompt-chip" data-id="${p.id}">${p.label}</button>
+                    <button class="prompt-chip" 
+                            data-id="${p.id}" 
+                            aria-label="Ask assistant: ${p.label}">${p.label}</button>
                 `).join('')}
             </div>
         `;
@@ -43,6 +45,7 @@ class AssistantPanel {
         this.promptsContainer.querySelectorAll('.prompt-chip').forEach(chip => {
             chip.addEventListener('click', () => {
                 const promptId = chip.getAttribute('data-id');
+                if (window.analytics) window.analytics.trackAssistantUsage(promptId);
                 this.showResponse(promptId);
             });
         });
@@ -53,6 +56,7 @@ class AssistantPanel {
 
         const text = window.promptEngine.generateResponse(promptId, this.currentStep);
         this.responseContainer.style.display = 'block';
+        this.responseContainer.setAttribute('aria-live', 'polite');
         this.responseContainer.innerHTML = '';
         
         await this.typeEffect(text);
@@ -60,8 +64,10 @@ class AssistantPanel {
 
     async typeEffect(text) {
         const speed = 25; // ms per char
+        let content = '';
         for (let i = 0; i < text.length; i++) {
-            this.responseContainer.innerHTML += text.charAt(i);
+            content += text.charAt(i);
+            this.responseContainer.innerHTML = content;
             await new Promise(resolve => setTimeout(resolve, speed));
             // Scroll to bottom of panel
             const panel = document.getElementById('assistant-panel');

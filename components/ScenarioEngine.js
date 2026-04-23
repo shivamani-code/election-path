@@ -17,16 +17,14 @@ class ScenarioEngine {
     startSimulation(step) {
         this.isSimulating = true;
         this.currentStep = step;
-        window.stateManager.state.isSimulating = true;
-        window.stateManager.notify();
+        window.stateManager.updateState({ isSimulating: true });
         this.render();
     }
 
     stopSimulation() {
         this.isSimulating = false;
         this.currentStep = null;
-        window.stateManager.state.isSimulating = false;
-        window.stateManager.notify();
+        window.stateManager.updateState({ isSimulating: false });
         const overlay = document.getElementById('scenario-overlay');
         if (overlay) overlay.remove();
     }

@@ -9,43 +9,52 @@ class StateManager {
             currentStepId: 1,
             completedSteps: [],
             flows: {},
-            history: []
+            history: [],
+            isSimulating: false
         };
+        this.prevState = null;
         this.listeners = [];
     }
 
     async loadFlows() {
-        // Use global ELECTION_DATA instead of fetch to avoid CORS
         if (window.ELECTION_DATA) {
-            this.state.flows = window.ELECTION_DATA;
-            this.notify();
+            this.updateState({ flows: window.ELECTION_DATA });
         } else {
             console.error('ELECTION_DATA not found');
         }
     }
 
     setRole(role) {
-        this.state.role = role;
-        this.state.currentStepId = 1;
-        this.state.completedSteps = [];
-        this.notify();
+        this.updateState({
+            role: role,
+            currentStepId: 1,
+            completedSteps: [],
+            isSimulating: false
+        });
     }
 
     completeStep(stepId) {
         if (!this.state.completedSteps.includes(stepId)) {
-            this.state.completedSteps.push(stepId);
+            this.updateState({
+                completedSteps: [...this.state.completedSteps, stepId]
+            });
         }
+    }
+    
+    updateState(newStateProps) {
+        this.prevState = { ...this.state };
+        this.state = { ...this.state, ...newStateProps };
         this.notify();
     }
 
     subscribe(callback) {
         this.listeners.push(callback);
         // Immediately notify with current state
-        callback(this.state);
+        callback(this.state, null);
     }
 
     notify() {
-        this.listeners.forEach(callback => callback(this.state));
+        this.listeners.forEach(callback => callback(this.state, this.prevState));
     }
 
     get currentState() {

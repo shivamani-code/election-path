@@ -5,11 +5,20 @@
 class ProgressTracker {
     constructor(containerId) {
         this.container = document.getElementById(containerId);
-        window.stateManager.subscribe((state) => this.render(state));
+        window.stateManager.subscribe((state, prevState) => this.render(state, prevState));
     }
 
-    render(state) {
+    render(state, prevState) {
         if (!this.container) return;
+
+        // Bail out if relevant state hasn't changed
+        if (prevState && 
+            prevState.role === state.role && 
+            prevState.currentStepId === state.currentStepId &&
+            prevState.completedSteps.length === state.completedSteps.length &&
+            prevState.isSimulating === state.isSimulating) {
+            return;
+        }
 
         if (!state.role) {
             this.container.innerHTML = '<div class="progress-placeholder">Select a role to track your journey progress.</div>';

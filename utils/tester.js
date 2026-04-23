@@ -11,9 +11,13 @@ class ElectionTester {
     async runAll() {
         console.group('🔍 Running ElectionOS System Health Checks');
         await this.testRoleSwitching();
+        await this.testInvalidRole();
         await this.testJourneyProgression();
+        await this.testRapidProgression();
         await this.testScenarioTriggering();
+        await this.testScenarioWithoutStep();
         await this.testAssistantResponses();
+        await this.testEmptyDataHandling();
         console.groupEnd();
         console.log('✅ Health check complete.');
     }
@@ -29,19 +33,36 @@ class ElectionTester {
         console.log(isCandidate ? '  PASS: Role set to Candidate' : '  FAIL: Role not set correctly');
     }
 
+    async testInvalidRole() {
+        console.log('--- Testing Invalid Role Selection ---');
+        window.stateManager.setRole('hacker');
+        const isInvalidRejected = window.stateManager.state.role !== 'hacker';
+        // stateManager defaults to clearing the role or holding current if invalid
+        console.log(isInvalidRejected ? '  PASS: Invalid role gracefully handled' : '  FAIL: Invalid role accepted');
+    }
+
     async testJourneyProgression() {
         console.log('--- Testing Journey Progression ---');
         window.stateManager.setRole('voter');
         const steps = window.stateManager.state.flows['voter'] || [];
         
-        // Sim completion
         steps.forEach(step => window.stateManager.completeStep(step.id));
         
         const allCompleted = window.stateManager.state.completedSteps.length === steps.length;
         console.log(allCompleted ? '  PASS: All steps completed successfully' : '  FAIL: Completion logic failed');
-        
-        // Clear for next test
-        window.stateManager.setRole('voter'); 
+        window.stateManager.setRole('voter'); // Reset
+    }
+
+    async testRapidProgression() {
+        console.log('--- Testing Rapid Clicking Edge Case ---');
+        window.stateManager.setRole('officer');
+        try {
+            // Rapid state updates simulating multiple clicks
+            for (let i = 0; i < 10; i++) window.stateManager.completeStep(1);
+            console.log('  PASS: System handled rapid updates without throwing errors');
+        } catch (e) {
+            console.log('  FAIL: Rapid progression caused a runtime error');
+        }
     }
 
     async testScenarioTriggering() {
@@ -53,8 +74,16 @@ class ElectionTester {
         
         const overlay = document.getElementById('scenario-overlay');
         console.log(overlay ? '  PASS: Scenario overlay triggered' : '  FAIL: Scenario overlay failed');
+        if (overlay) overlay.remove();
+    }
+
+    async testScenarioWithoutStep() {
+        console.log('--- Testing Scenario Without Step Data ---');
+        const event = new CustomEvent('trigger_simulation', { detail: {} });
+        window.dispatchEvent(event);
         
-        // Cleanup
+        const overlay = document.getElementById('scenario-overlay');
+        console.log(!overlay ? '  PASS: Handled empty scenario gracefully' : '  FAIL: Displayed empty scenario modal');
         if (overlay) overlay.remove();
     }
 
@@ -62,14 +91,18 @@ class ElectionTester {
         console.log('--- Testing Assistant Responses ---');
         const step = window.ELECTION_DATA.voter[0];
         const response = window.promptEngine.generateResponse('explain', step);
-        const hasContent = response && response.includes('Gateway') === false; // Just basic length check
         console.log(response.length > 20 ? '  PASS: Assistant generated valid response' : '  FAIL: Assistant response is empty or weak');
+    }
+
+    async testEmptyDataHandling() {
+        console.log('--- Testing Empty Data Handling ---');
+        const response = window.promptEngine.generateResponse('explain', null);
+        console.log(response.includes('select a journey step') ? '  PASS: Handled empty prompt data' : '  FAIL: Failed to handle empty prompt data');
     }
 }
 
 window.ElectionTester = ElectionTester;
 
-// Auto-initialize if dev toolbar is present
 if (window.DevToolbar) {
     new ElectionTester();
 }

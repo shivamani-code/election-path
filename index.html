@@ -8,6 +8,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google tag (gtag.js) - Placeholder Measurement ID -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
 </head>
 <body>
     <div id="app">
@@ -90,6 +99,8 @@
 
     <!-- Scripts (Ordered by dependency) -->
     <script src="data/data.js"></script>
+    <script src="utils/domHelpers.js"></script>
+    <script src="utils/analytics.js"></script>
     <script src="utils/stateManager.js"></script>
     <script src="utils/promptEngine.js"></script>
     <script src="components/RoleSelector.js"></script>

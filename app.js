@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Load initial data from window.ELECTION_DATA
     await window.stateManager.loadFlows();
 
+    // Initialize Services
+    window.analytics = new AnalyticsTracker();
+
     // Initialize Components
     new RoleSelector('role-selector-container');
     new SystemVoice('system-voice-panel');

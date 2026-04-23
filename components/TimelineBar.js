@@ -12,11 +12,18 @@ class TimelineBar {
             { id: 'post-election', label: 'Results', minStep: 0.9, maxStep: 1.0 }
         ];
         
-        window.stateManager.subscribe((state) => this.render(state));
+        window.stateManager.subscribe((state, prevState) => this.render(state, prevState));
     }
 
-    render(state) {
+    render(state, prevState) {
         if (!this.container) return;
+
+        // Bail out if relevant state hasn't changed
+        if (prevState && 
+            prevState.role === state.role && 
+            prevState.currentStepId === state.currentStepId) {
+            return;
+        }
 
         if (!state.role) {
             this.container.innerHTML = '<div class="timeline-placeholder">Select a role to see the election timeline.</div>';
